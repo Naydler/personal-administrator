@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { Stage, Layer, Rect, Circle } from 'react-konva';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [shapes, setShapes] = useState<any[]>([]);
+
+  // Función para agregar un rectángulo
+  const addRectangle = () => {
+    const rect = {
+      x: Math.random() * 500,
+      y: Math.random() * 500,
+      width: 100,
+      height: 100,
+      fill: 'blue',
+      id: `rect${shapes.length + 1}`,
+    };
+    setShapes([...shapes, rect]);
+  };
+
+  // Función para agregar un círculo
+  const addCircle = () => {
+    const circle = {
+      x: Math.random() * 500,
+      y: Math.random() * 500,
+      radius: 50,
+      fill: 'green',
+      id: `circle${shapes.length + 1}`,
+    };
+    setShapes([...shapes, circle]);
+  };
 
   return (
-    <>
+    <div className="App">
+      <h1>Worksite Map Creator</h1>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <button onClick={addRectangle}>Add Rectangle</button>
+        <button onClick={addCircle}>Add Circle</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <Stage width={window.innerWidth} height={window.innerHeight}>
+        <Layer>
+          {shapes.map((shape, i) => {
+            if (shape.width) {
+              return <Rect key={i} {...shape} draggable />;
+            } else {
+              return <Circle key={i} {...shape} draggable />;
+            }
+          })}
+        </Layer>
+      </Stage>
+    </div>
+  );
 }
 
-export default App
+export default App;
